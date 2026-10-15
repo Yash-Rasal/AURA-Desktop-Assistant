@@ -1,0 +1,258 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent !important;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.aura-app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: visible;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-drag-region {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  -webkit-app-region: drag;
+}
+
+.aura-orb {
+  position: relative;
+  display: flex;
+  width: 115px;
+  height: 115px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  user-select: none;
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
+  background: radial-gradient(circle at top, #b59eff, #4a34e0, #140b3b);
+  box-shadow: 
+    0 0 30px rgba(124, 92, 255, 0.5), 
+    0 0 60px rgba(74, 52, 224, 0.3),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
+  animation: aura-idle-pulse 4s ease-in-out infinite;
+}
+
+.aura-orb:hover {
+  transform: scale(1.08) rotate(3deg);
+  box-shadow: 
+    0 0 40px rgba(144, 112, 255, 0.7), 
+    0 0 80px rgba(94, 72, 244, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.aura-orb::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+/* Wake-word State – soft amber pulse, distinct from idle */
+.aura-orb--wake {
+  background: radial-gradient(circle at top, #ffe066, #c97b00, #3a2000);
+  box-shadow:
+    0 0 30px rgba(255, 180, 0, 0.55),
+    0 0 60px rgba(201, 123, 0, 0.3),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
+  animation: aura-wake-breathe 3s ease-in-out infinite;
+}
+
+.aura-orb--wake::after {
+  opacity: 1;
+  border-color: rgba(255, 200, 0, 0.35);
+  animation: aura-ring-ripple 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+/* Listening State */
+.aura-orb--listening {
+  transform: scale(1.1);
+  background: radial-gradient(circle, #39ff14, #008f11, #022b05);
+  box-shadow: 
+    0 0 40px rgba(57, 255, 20, 0.8), 
+    0 0 80px rgba(0, 143, 17, 0.4),
+    inset 0 0 15px rgba(255, 255, 255, 0.4);
+  animation: aura-listening-bounce 1.2s ease-in-out infinite alternate;
+}
+
+.aura-orb--listening::after {
+  opacity: 1;
+  border-color: rgba(57, 255, 20, 0.4);
+  animation: aura-ring-ripple 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+/* Thinking State */
+.aura-orb--thinking {
+  transform: scale(1.05);
+  background: radial-gradient(circle, #00f0ff, #0051a3, #02132e);
+  box-shadow: 
+    0 0 40px rgba(0, 240, 255, 0.8), 
+    0 0 80px rgba(0, 81, 163, 0.4),
+    inset 0 0 15px rgba(255, 255, 255, 0.3);
+  animation: aura-thinking-rotate 2s linear infinite;
+}
+
+/* Speaking State */
+.aura-orb--speaking {
+  transform: scale(1.1);
+  background: radial-gradient(circle, #ff007f, #8000ff, #1c003d);
+  box-shadow: 
+    0 0 40px rgba(255, 0, 127, 0.8), 
+    0 0 80px rgba(128, 0, 255, 0.4),
+    inset 0 0 15px rgba(255, 255, 255, 0.4);
+  animation: aura-listening-bounce 0.8s ease-in-out infinite alternate;
+}
+
+.aura-orb--speaking::after {
+  opacity: 1;
+  border-color: rgba(255, 0, 127, 0.4);
+  animation: aura-ring-ripple 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+/* Transcript styling with premium glassmorphism */
+.aura-transcript {
+  position: absolute;
+  bottom: 175px;
+  left: 50%;
+  z-index: 999;
+  width: 300px;
+  padding: 16px 20px;
+  transform: translateX(-50%);
+  border-radius: 20px;
+  color: #f1f0f7;
+  background: rgba(14, 9, 36, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(124, 92, 255, 0.1);
+  font-size: 14.5px;
+  line-height: 1.6;
+  font-weight: 500;
+  pointer-events: none;
+  animation: aura-fade-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.aura-transcript-tail {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+  background: rgba(14, 9, 36, 0.85);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Keyframes */
+@keyframes aura-idle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 0 25px rgba(124, 92, 255, 0.4), 
+      0 0 50px rgba(74, 52, 224, 0.2),
+      inset 0 0 12px rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 
+      0 0 35px rgba(124, 92, 255, 0.6), 
+      0 0 70px rgba(74, 52, 224, 0.4),
+      inset 0 0 18px rgba(255, 255, 255, 0.25);
+  }
+}
+
+@keyframes aura-wake-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 22px rgba(255, 180, 0, 0.4),
+      0 0 45px rgba(201, 123, 0, 0.2),
+      inset 0 0 12px rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow:
+      0 0 38px rgba(255, 200, 0, 0.7),
+      0 0 70px rgba(201, 123, 0, 0.4),
+      inset 0 0 18px rgba(255, 255, 255, 0.25);
+  }
+}
+
+@keyframes aura-listening-bounce {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes aura-thinking-rotate {
+  0% {
+    transform: scale(1.05) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.08) rotate(180deg);
+  }
+  100% {
+    transform: scale(1.05) rotate(360deg);
+  }
+}
+
+@keyframes aura-ring-ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+@keyframes aura-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
