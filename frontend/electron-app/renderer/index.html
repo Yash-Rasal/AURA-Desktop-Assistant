@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; connect-src 'self' http://127.0.0.1:8765 ws://127.0.0.1:8765; style-src 'self' 'unsafe-inline'; media-src 'self' blob: http://127.0.0.1:8765"
+    />
+    <title>Desktop AI Companion</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-wrapper">
+      
+      <!-- Realistic Floating Robot -->
+      <div class="robot-bot" id="robot-toggle" title="Click to toggle chat panel">
+        
+        <!-- Status Cloud Bubble -->
+        <div class="cloud-bubble hidden" id="robot-cloud"></div>
+        
+        <div class="antennas">
+          <div class="antenna left"><div class="bulb"></div></div>
+          <div class="antenna right"><div class="bulb"></div></div>
+        </div>
+
+        <div class="robot-head" id="robot-head">
+          <div class="visor">
+             <div class="eye" id="robot-eye-left"></div>
+             <div class="eye" id="robot-eye-right"></div>
+          </div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
+        </div>
+
+        <div class="robot-neck"></div>
+        
+        <div class="robot-body">
+           <div class="core-light"></div>
+        </div>
+
+      </div>
+
+      <!-- Chat Panel -->
+      <div class="panel collapsed" id="panel">
+        <header class="titlebar" id="titlebar">
+          <span class="title">Sys-Core</span>
+          <div class="title-actions">
+            <button type="button" id="btn-settings" title="Settings">⚙</button>
+            <button type="button" id="btn-minimize" title="Hide">—</button>
+          </div>
+        </header>
+
+        <section class="settings hidden" id="settings">
+          <label>Backend URL
+            <input type="text" id="backend-url" value="http://127.0.0.1:8765" />
+          </label>
+          <label class="check">
+            <input type="checkbox" id="speak-replies" checked />
+            Speak replies
+          </label>
+          <label class="check">
+            <input type="checkbox" id="use-screen" />
+            Include last screenshot in text chat
+          </label>
+          <label>Email Provider
+            <select id="email-provider" style="background:#0b1325;color:#00e5ff;border:1px solid rgba(0,229,255,0.4);border-radius:4px;padding:4px;width:100%;font-size:11px;margin-top:2px;">
+              <option value="gmail_web">Gmail Web</option>
+              <option value="mailto">Default Mail App (Mailto)</option>
+              <option value="outlook_com">Outlook Desktop</option>
+            </select>
+          </label>
+          <button type="button" id="btn-clear-memory">Clear session memory</button>
+        </section>
+
+        <div class="preview-wrap hidden" id="preview-wrap">
+          <img id="screenshot-preview" alt="Screenshot preview" />
+        </div>
+
+        <main class="messages" id="messages"></main>
+
+        <footer class="composer">
+          <div class="toolbar">
+            <button type="button" id="btn-screenshot" title="Capture screen (Ctrl+Shift+S)">📷</button>
+            <button type="button" id="btn-voice" title="Hold to talk (Ctrl+Shift+V)">🎤</button>
+            <span class="status" id="status">Ready</span>
+          </div>
+          <div class="quick-chips-bar" id="quick-chips-bar">
+            <button type="button" class="chip" data-cmd="open chrome" title="Open Google Chrome">💻 Chrome</button>
+            <button type="button" class="chip" data-cmd="open youtube" title="Open YouTube">🌐 YouTube</button>
+            <button type="button" class="chip" data-cmd="compose email" title="Compose Email">✉️ Compose Email</button>
+            <button type="button" class="chip" data-cmd="volume up" title="Volume Up">🔊 Vol +</button>
+            <button type="button" class="chip" data-cmd="volume down" title="Volume Down">🔉 Vol -</button>
+            <button type="button" class="chip" data-cmd="increase brightness" title="Brightness Up">☀️ Bright +</button>
+            <button type="button" class="chip" data-cmd="decrease brightness" title="Brightness Down">🌙 Bright -</button>
+            <button type="button" class="chip" data-cmd="lock pc" title="Lock Workstation">🔒 Lock</button>
+          </div>
+          <textarea
+            id="input"
+            rows="2"
+            placeholder="Awaiting input... (Say 'Hey Jarvis' or click 🎤)"
+          ></textarea>
+          <button type="button" id="btn-send" class="send">Execute</button>
+        </footer>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
